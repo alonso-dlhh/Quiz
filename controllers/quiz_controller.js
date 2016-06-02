@@ -35,16 +35,38 @@ exports.ownershipRequired = function(req, res, next){
 
 // GET /quizzes
 exports.index = function(req, res, next) {
-	models.Quiz.findAll()
+	var busqueda = req.query.busqueda || '';
+  if (busqueda === ''){
+    busqueda = '%';
+  }
+  else {
+    busqueda = ('%'+ busqueda.trim().replace(' ','%') +'%');
+  }
+  models.Quiz.findAll({ where: {question: {$like: busqueda}}})
 		.then(function(quizzes) {
-			res.render('quizzes/index.ejs', { quizzes: quizzes});
+			res.render('quizzes/index.ejs', { busqueda: busqueda, quizzes: quizzes});
 		})
 		.catch(function(error) {
 			next(error);
 		});
 };
 
+// GET /quizzes?search=busqueda
+exports.search = function(req, res, next){
 
+  var busqueda = req.query.busqueda || '';
+
+  models.Quiz.findAll({where: ["question", '%'+req.query.busqueda+'%']})
+      .then(function(quiz) {
+          if (quiz) {
+            res.render('quizzes/search', {busqueda:busqueda, quiz: quiz});
+          } else { 
+            throw new Error('No existe');
+          } 
+        })
+        .catch(function(error) { next(error); });
+
+}
 // GET /quizzes/:id
 exports.show = function(req, res, next) {
 

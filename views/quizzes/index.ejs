@@ -1,3 +1,12 @@
+<p>
+<form method="get" action="/quizzes?search=<%= busqueda %>">  
+  <p>Búsqueda</p>
+  <p>
+  <input type="text" name="busqueda" value='<% busqueda %>' placeholder="Texto a buscar" />
+  <input type="submit" value="Buscar"/>
+  </p>
+</form>
+</p>
 
 <table>
   <% for (var i in quizzes) { %>        

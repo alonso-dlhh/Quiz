@@ -1,0 +1,42 @@
+<p>
+<form method="get" action="/quizzes?search=<%= busqueda %>">  
+  <p>Búsqueda</p>
+  <p>
+  <input type="text" name="busqueda" value='<% busqueda %>' placeholder="Texto a buscar" />
+  <input type="submit" value="Buscar"/>
+  </p>
+</form>
+</p>
+<p>
+<%= busqueda %>
+</p>
+<table>     
+     <tr>
+        <td>
+           <a href="/quizzes/<%= quiz.id %>"><%= quiz.question %></a>
+        </td>
+
+        <% if (session.user) { %>
+           <% if (session.user.isAdmin || session.user.id === quiz.AuthorId) { %>
+
+              <td>
+                 <a href="/quizzes/<%= quiz.id %>/edit"><button>editar</button></a>
+              </td>
+              <td>
+                 <a href="/quizzes/<%= quiz.id %>?_method=DELETE" 
+                    onClick="return confirm('Borrar: <%= quiz.question %>');">
+                    <button>borrar</button>
+                 </a>
+              </td>
+
+           <% } %>          
+        <% } %>
+
+     </tr> 
+  <% } %>
+</table>
+<form method="get" action="/quizzes">  
+  <p>
+  <input type="submit" value="Atrás"/>
+  </p>
+</form>
